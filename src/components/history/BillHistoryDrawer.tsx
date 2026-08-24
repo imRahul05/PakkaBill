@@ -68,7 +68,7 @@ export function BillHistoryDrawer({
     <Sheet open={open} onOpenChange={onOpenChange} side="right">
       <SheetHeader onClose={() => onOpenChange(false)}>
         <div className="flex items-center gap-2">
-          <Clock className="h-5 w-5 text-amber-400" />
+          <Clock className="h-5 w-5 text-primary" />
           <div>
             <SheetTitle>Recent Bills History</SheetTitle>
             <SheetDescription>
@@ -81,20 +81,20 @@ export function BillHistoryDrawer({
       <SheetContent>
         {/* FIFO Eviction Notice */}
         {lastEvictedBill && (
-          <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl space-y-1 text-xs text-amber-300">
+          <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl space-y-1 text-xs text-amber-700 dark:text-amber-300">
             <div className="flex items-center justify-between font-semibold">
               <span className="flex items-center gap-1.5">
-                <AlertTriangle className="h-4 w-4 text-amber-400" /> Oldest Bill Evicted (FIFO Cap)
+                <AlertTriangle className="h-4 w-4 text-amber-500" /> Oldest Bill Evicted (FIFO Cap)
               </span>
               <button
                 type="button"
                 onClick={onClearEvictedNotice}
-                className="text-[10px] text-amber-400 hover:underline cursor-pointer"
+                className="text-[10px] text-amber-600 dark:text-amber-400 hover:underline cursor-pointer"
               >
                 Dismiss
               </button>
             </div>
-            <p className="text-[11px] text-amber-200/80">
+            <p className="text-[11px] opacity-90">
               Bill #{lastEvictedBill.invoiceNumber} ({lastEvictedBill.buyerName}) was archived to keep history bounded.
             </p>
           </div>
@@ -112,7 +112,7 @@ export function BillHistoryDrawer({
         </div>
 
         {/* Info Note */}
-        <div className="flex items-start gap-2 p-2 rounded-lg bg-neutral-950/60 border border-neutral-800 text-[11px] text-neutral-400">
+        <div className="flex items-start gap-2 p-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-950/60 border border-neutral-200 dark:border-neutral-800 text-[11px] text-neutral-600 dark:text-neutral-400">
           <Info className="h-4 w-4 text-neutral-500 shrink-0 mt-0.5" />
           <span>
             100% private: Bills never leave this device. Export full backup to save your records permanently.

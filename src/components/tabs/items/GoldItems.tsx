@@ -56,12 +56,12 @@ export function GoldItems({
     <div className="space-y-4">
       {/* Expand/Collapse All Toolbar if multiple items */}
       {items.length > 1 && (
-        <div className="flex items-center justify-between pb-1 text-xs text-neutral-400">
+        <div className="flex items-center justify-between pb-1 text-xs text-neutral-500 dark:text-neutral-400">
           <span>{items.length} Gold Line Items</span>
           <button
             type="button"
             onClick={() => handleToggleAll(!allExpanded)}
-            className="flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium cursor-pointer transition-colors"
+            className="flex items-center gap-1 text-primary hover:opacity-80 font-semibold cursor-pointer transition-colors"
           >
             <ChevronsUpDown className="h-3.5 w-3.5" />
             {allExpanded ? "Collapse All Items" : "Expand All Items"}
@@ -76,15 +76,15 @@ export function GoldItems({
         return (
           <div
             key={item.id || index}
-            className="rounded-xl border border-neutral-800 bg-neutral-900/70 shadow-sm hover:border-neutral-700 transition-all duration-200 overflow-hidden"
+            className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/70 shadow-xs hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 overflow-hidden"
           >
             {/* Header: Clickable to toggle collapse */}
             <div
               onClick={() => toggleItemExpanded(index, isExpanded)}
-              className="flex flex-wrap items-center justify-between gap-2 p-3.5 bg-neutral-950/40 hover:bg-neutral-800/40 cursor-pointer select-none transition-colors border-b border-neutral-800/60"
+              className="flex flex-wrap items-center justify-between gap-2 p-3.5 bg-neutral-50/80 dark:bg-neutral-950/40 hover:bg-neutral-100 dark:hover:bg-neutral-800/40 cursor-pointer select-none transition-colors border-b border-neutral-200 dark:border-neutral-800/60"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold shrink-0">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-muted text-primary-text text-xs font-bold shrink-0 border border-primary-border">
                   #{index + 1}
                 </span>
                 <Badge variant="gold" className="shrink-0">Gold</Badge>
@@ -92,14 +92,14 @@ export function GoldItems({
 
                 {/* Collapsed summary pill */}
                 {!isExpanded && (
-                  <div className="flex items-center gap-2 truncate text-xs text-neutral-300">
-                    <span className="font-semibold text-neutral-100 truncate">{item.name || "Untitled Gold Item"}</span>
-                    <span className="text-neutral-500">•</span>
-                    <span className="font-mono text-neutral-400">{formatGrams(item.netWeight)}</span>
+                  <div className="flex items-center gap-2 truncate text-xs text-neutral-700 dark:text-neutral-300">
+                    <span className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">{item.name || "Untitled Gold Item"}</span>
+                    <span className="text-neutral-400 dark:text-neutral-600">•</span>
+                    <span className="font-mono text-neutral-600 dark:text-neutral-400">{formatGrams(item.netWeight)}</span>
                     {item.huid && (
                       <>
-                        <span className="text-neutral-500">•</span>
-                        <span className="font-mono text-[11px] text-amber-400/80">{item.huid}</span>
+                        <span className="text-neutral-400 dark:text-neutral-600">•</span>
+                        <span className="font-mono text-[11px] text-primary">{item.huid}</span>
                       </>
                     )}
                   </div>
@@ -108,8 +108,8 @@ export function GoldItems({
 
               <div className="flex items-center gap-2 ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
                 <div className="text-right mr-1">
-                  <span className="text-[10px] text-neutral-400 block leading-tight">Total</span>
-                  <span className="text-sm font-bold text-amber-400 font-mono">
+                  <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block leading-tight">Total</span>
+                  <span className="text-sm font-bold text-primary font-mono">
                     {formatCurrency(item.lineTotal)}
                   </span>
                 </div>
@@ -120,7 +120,7 @@ export function GoldItems({
                   variant="ghost"
                   size="icon"
                   onClick={() => toggleItemExpanded(index, isExpanded)}
-                  className="h-8 w-8 text-neutral-400 hover:text-amber-400 hover:bg-neutral-800"
+                  className="h-8 w-8 text-neutral-500 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-800"
                   title={isExpanded ? "Collapse item" : "Expand item"}
                 >
                   {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -132,7 +132,7 @@ export function GoldItems({
                     variant="ghost"
                     size="icon"
                     onClick={() => onRemoveItem(index)}
-                    className="h-8 w-8 text-neutral-400 hover:text-rose-400 hover:bg-neutral-800"
+                    className="h-8 w-8 text-neutral-400 hover:text-rose-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                     title="Remove item"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -304,14 +304,14 @@ export function GoldItems({
 
                   <div className="space-y-1.5">
                     <Label>Resolved Making Charge (₹)</Label>
-                    <div className="h-9 px-3 py-1.5 rounded-md bg-neutral-900 border border-neutral-800 text-sm font-semibold text-neutral-200 flex items-center">
+                    <div className="h-9 px-3 py-1.5 rounded-md bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-sm font-semibold text-neutral-800 dark:text-neutral-200 flex items-center">
                       {formatCurrency(item.makingChargeAmount)}
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-1">
-                      <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
+                      <ShieldCheck className="h-3.5 w-3.5 text-primary" />
                       <Label>BIS HUID / Hallmark No.</Label>
                     </div>
                     <Input
@@ -324,22 +324,22 @@ export function GoldItems({
 
                 {/* Row 4: Tax Split Preview (in GST mode) */}
                 {isGstMode && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 px-3 py-2 bg-amber-500/5 rounded-lg border border-amber-500/10 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 px-3 py-2 bg-primary-muted/50 rounded-lg border border-primary-border/60 text-xs">
                     <div>
-                      <span className="text-neutral-400">Metal GST ({item.metalGstRate}%): </span>
-                      <span className="font-semibold text-neutral-200">
+                      <span className="text-neutral-500 dark:text-neutral-400">Metal GST ({item.metalGstRate}%): </span>
+                      <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                         {formatCurrency((item.metalValue * item.metalGstRate) / 100)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-neutral-400">Making GST ({item.makingGstRate}%): </span>
-                      <span className="font-semibold text-neutral-200">
+                      <span className="text-neutral-500 dark:text-neutral-400">Making GST ({item.makingGstRate}%): </span>
+                      <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                         {formatCurrency((item.makingChargeAmount * item.makingGstRate) / 100)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-neutral-400">Total Tax on Item: </span>
-                      <span className="font-bold text-amber-400">
+                      <span className="text-neutral-500 dark:text-neutral-400">Total Tax on Item: </span>
+                      <span className="font-bold text-primary">
                         {formatCurrency(item.totalTax)}
                       </span>
                     </div>
@@ -347,10 +347,10 @@ export function GoldItems({
                 )}
 
                 {/* Row 5: Old Gold Exchange (Return / Credit) */}
-                <div className="p-3 bg-neutral-950/80 rounded-lg border border-neutral-800 space-y-3">
+                <div className="p-3 bg-neutral-50 dark:bg-neutral-950/80 rounded-lg border border-neutral-200 dark:border-neutral-800 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <ArrowDownCircle className="h-4 w-4 text-emerald-400" />
+                      <ArrowDownCircle className="h-4 w-4 text-emerald-500" />
                       <Label className="text-xs">Old Gold Exchange / Return Deduction</Label>
                     </div>
                     <Switch
@@ -371,7 +371,7 @@ export function GoldItems({
                   </div>
 
                   {isExchangeEnabled && (
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-neutral-800 animate-in fade-in">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-neutral-200 dark:border-neutral-800 animate-in fade-in">
                       <div className="sm:col-span-2 space-y-1">
                         <Label className="text-[11px]">Old Gold Description</Label>
                         <Input
@@ -406,7 +406,7 @@ export function GoldItems({
                       </div>
                       <div className="space-y-1">
                         <Label className="text-[11px]">Deduction Credit (₹)</Label>
-                        <div className="h-9 px-3 py-1.5 rounded-md bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 font-semibold text-xs flex items-center">
+                        <div className="h-9 px-3 py-1.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-semibold text-xs flex items-center">
                           -{formatCurrency(item.oldGoldExchange?.totalDeduction || 0)}
                         </div>
                       </div>

@@ -38,7 +38,7 @@ export function GstRateSearchModal({ open, onOpenChange }: GstRateSearchModalPro
       <DialogContent maxWidth="4xl" onClose={() => onOpenChange(false)} className="max-h-[90vh] flex flex-col">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <Percent className="h-5 w-5 text-amber-400" />
+            <Percent className="h-5 w-5 text-primary" />
             <DialogTitle>Indian GST 2.0 Rate Directory & HSN Lookup</DialogTitle>
           </div>
           <DialogDescription>
@@ -47,11 +47,11 @@ export function GstRateSearchModal({ open, onOpenChange }: GstRateSearchModalPro
         </DialogHeader>
 
         {/* 2026 GST Slabs Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 pb-3 border-b border-neutral-800">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
           {GST_RATES_2026.map((slab: GstRateInfo) => (
-            <div key={slab.rate} className="p-2 rounded-lg bg-neutral-950 border border-neutral-800 text-center">
-              <div className="font-mono font-bold text-amber-400 text-sm">{slab.rate}%</div>
-              <div className="text-[10px] text-neutral-400 truncate" title={slab.label}>{slab.label}</div>
+            <div key={slab.rate} className="p-2 rounded-lg bg-neutral-100 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 text-center">
+              <div className="font-mono font-bold text-primary text-sm">{slab.rate}%</div>
+              <div className="text-[10px] text-neutral-600 dark:text-neutral-400 truncate" title={slab.label}>{slab.label}</div>
             </div>
           ))}
         </div>
@@ -72,15 +72,15 @@ export function GstRateSearchModal({ open, onOpenChange }: GstRateSearchModalPro
           {filteredHsn.map((item: HsnReference, idx: number) => (
             <div
               key={idx}
-              className="p-3 rounded-lg border border-neutral-800 bg-neutral-900/60 hover:border-neutral-700 flex items-center justify-between gap-3 transition-colors"
+              className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/60 hover:border-neutral-300 dark:hover:border-neutral-700 flex items-center justify-between gap-3 transition-colors shadow-xs"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-neutral-100 text-sm">{item.hsn}</span>
+                  <span className="font-mono font-bold text-neutral-900 dark:text-neutral-100 text-sm">{item.hsn}</span>
                   <Badge variant="warning">{item.rate || item.defaultRate}% GST</Badge>
-                  <span className="text-[11px] text-neutral-400 capitalize">({item.category})</span>
+                  <span className="text-[11px] text-neutral-500 dark:text-neutral-400 capitalize">({item.category})</span>
                 </div>
-                <p className="text-xs text-neutral-300">{item.description}</p>
+                <p className="text-xs text-neutral-700 dark:text-neutral-300">{item.description}</p>
                 {item.notes && <p className="text-[11px] text-neutral-500 italic">{item.notes}</p>}
               </div>
 
@@ -93,7 +93,7 @@ export function GstRateSearchModal({ open, onOpenChange }: GstRateSearchModalPro
               >
                 {copiedHsn === item.hsn ? (
                   <>
-                    <Check className="h-3.5 w-3.5 mr-1 text-emerald-400" /> Copied
+                    <Check className="h-3.5 w-3.5 mr-1 text-emerald-500" /> Copied
                   </>
                 ) : (
                   <>

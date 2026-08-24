@@ -64,7 +64,7 @@ export function InvoiceTab({ invoice, isGstMode, onUpdate }: InvoiceTabProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4 text-amber-400" />
+            <FileText className="h-4 w-4 text-primary" />
             <CardTitle>Invoice Document Settings</CardTitle>
           </div>
           <CardDescription>Numbering, billing dates, reverse charge, and document classification</CardDescription>
@@ -93,7 +93,7 @@ export function InvoiceTab({ invoice, isGstMode, onUpdate }: InvoiceTabProps) {
                 value={invoice.invoiceNumber}
                 onChange={(e) => onUpdate({ invoiceNumber: e.target.value })}
               />
-              <p className="text-[10px] text-neutral-400">Rule 46: Unique sequential series per financial year</p>
+              <p className="text-[10px] text-neutral-500 dark:text-neutral-400">Rule 46: Unique sequential series per financial year</p>
             </div>
 
             <div className="space-y-1.5">
@@ -137,7 +137,7 @@ export function InvoiceTab({ invoice, isGstMode, onUpdate }: InvoiceTabProps) {
 
           {/* Reverse Charge & Dispatch info */}
           {isGstMode && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 bg-neutral-950/60 rounded-lg border border-neutral-800">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 bg-neutral-100 dark:bg-neutral-950/60 rounded-lg border border-neutral-200 dark:border-neutral-800">
               <div className="space-y-1.5">
                 <Label>Tax Payable on Reverse Charge (RCM)?</Label>
                 <div className="pt-2">
@@ -208,7 +208,7 @@ export function InvoiceTab({ invoice, isGstMode, onUpdate }: InvoiceTabProps) {
                   <button
                     type="button"
                     onClick={() => handleRemoveTerm(index)}
-                    className="p-2 text-neutral-400 hover:text-rose-400 hover:bg-neutral-800 rounded-md cursor-pointer"
+                    className="p-2 text-neutral-400 hover:text-rose-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md cursor-pointer"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

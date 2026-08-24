@@ -39,7 +39,7 @@ export function TabsList({
   return (
     <div
       className={cn(
-        "inline-flex h-11 items-center justify-start rounded-lg bg-neutral-900/90 p-1 text-neutral-400 border border-neutral-800 gap-1",
+        "inline-flex h-11 items-center justify-start rounded-lg bg-neutral-100 dark:bg-neutral-900/90 p-1 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800 gap-1",
         className
       )}
       {...props}
@@ -72,10 +72,10 @@ export function TabsTrigger({
       aria-selected={isSelected}
       onClick={() => context.onValueChange(value)}
       className={cn(
-        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-3.5 py-1.5 text-xs font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none",
+        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-3.5 py-1.5 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none",
         isSelected
-          ? "bg-amber-500 text-neutral-950 font-semibold shadow-sm"
-          : "text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/60",
+          ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+          : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60",
         className
       )}
       {...props}

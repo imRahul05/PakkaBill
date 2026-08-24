@@ -86,7 +86,7 @@ export function PresetTemplatesModal({
       <DialogContent maxWidth="3xl" onClose={() => onOpenChange(false)} className="max-h-[90vh] flex flex-col">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <Bookmark className="h-5 w-5 text-amber-400" />
+            <Bookmark className="h-5 w-5 text-primary" />
             <DialogTitle>Saved Preset Templates</DialogTitle>
           </div>
           <DialogDescription>
@@ -96,15 +96,15 @@ export function PresetTemplatesModal({
 
         <div className="flex-1 overflow-y-auto space-y-4 py-2 pr-1">
           {statusMsg && (
-            <div className="p-3 bg-emerald-950/80 border border-emerald-700 text-emerald-300 rounded-lg flex items-center gap-2 text-xs font-bold">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> {statusMsg}
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 rounded-lg flex items-center gap-2 text-xs font-bold">
+              <CheckCircle2 className="h-4 w-4 text-emerald-500" /> {statusMsg}
             </div>
           )}
 
           {/* Form to save current invoice as preset */}
-          <form onSubmit={handleSaveCurrentAsPreset} className="p-3.5 rounded-xl border border-neutral-800 bg-neutral-950 space-y-3">
-            <h3 className="text-xs font-bold uppercase text-neutral-300 flex items-center gap-1.5">
-              <Plus className="h-3.5 w-3.5 text-amber-400" /> Save Active Invoice as New Preset
+          <form onSubmit={handleSaveCurrentAsPreset} className="p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 space-y-3 shadow-xs">
+            <h3 className="text-xs font-bold uppercase text-neutral-900 dark:text-neutral-300 flex items-center gap-1.5">
+              <Plus className="h-3.5 w-3.5 text-primary" /> Save Active Invoice as New Preset
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
@@ -136,25 +136,25 @@ export function PresetTemplatesModal({
 
           {/* Existing Presets List */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-400">Available Presets ({presets.length})</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">Available Presets ({presets.length})</h3>
             {presets.length === 0 ? (
-              <div className="text-center py-8 text-neutral-500 text-xs border border-dashed border-neutral-800 rounded-xl">
+              <div className="text-center py-8 text-neutral-500 text-xs border border-dashed border-neutral-300 dark:border-neutral-800 rounded-xl">
                 No presets saved yet. Fill out an invoice and save it above!
               </div>
             ) : (
               presets.map((preset) => (
                 <div
                   key={preset.id}
-                  className="p-3 rounded-xl border border-neutral-800 bg-neutral-900/60 flex items-center justify-between gap-3 hover:border-neutral-700 transition-colors"
+                  className="p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/60 flex items-center justify-between gap-3 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors shadow-xs"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-neutral-100">{preset.name}</span>
+                      <span className="font-bold text-sm text-neutral-900 dark:text-neutral-100">{preset.name}</span>
                       <Badge variant={preset.category === "gold" ? "gold" : preset.category === "silver" ? "silver" : preset.category === "grocery" ? "success" : "blue"}>
                         {preset.category.toUpperCase()}
                       </Badge>
                     </div>
-                    {preset.description && <p className="text-xs text-neutral-400">{preset.description}</p>}
+                    {preset.description && <p className="text-xs text-neutral-600 dark:text-neutral-400">{preset.description}</p>}
                     <p className="text-[10px] text-neutral-500">{formatDateTime(preset.createdAt)}</p>
                   </div>
 
@@ -166,14 +166,14 @@ export function PresetTemplatesModal({
                       onClick={() => handleApply(preset)}
                       className="text-xs"
                     >
-                      <FolderOpen className="h-3.5 w-3.5 mr-1 text-amber-400" /> Apply
+                      <FolderOpen className="h-3.5 w-3.5 mr-1 text-primary" /> Apply
                     </Button>
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDelete(preset.id)}
-                      className="text-xs text-neutral-400 hover:text-rose-400"
+                      className="text-xs text-neutral-400 hover:text-rose-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>

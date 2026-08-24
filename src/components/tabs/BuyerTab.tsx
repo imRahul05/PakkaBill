@@ -85,7 +85,7 @@ export function BuyerTab({ buyer, sellerStateCode, isGstMode, onUpdate }: BuyerT
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-amber-400" />
+              <User className="h-4 w-4 text-primary" />
               <CardTitle>Buyer / Customer Details</CardTitle>
             </div>
             {isGstMode && (
@@ -181,7 +181,7 @@ export function BuyerTab({ buyer, sellerStateCode, isGstMode, onUpdate }: BuyerT
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-amber-400" />
+            <MapPin className="h-4 w-4 text-primary" />
             <CardTitle>Billing Address & Place of Supply</CardTitle>
           </div>
           <CardDescription>
@@ -241,11 +241,11 @@ export function BuyerTab({ buyer, sellerStateCode, isGstMode, onUpdate }: BuyerT
           </div>
 
           {isGstMode && (
-            <div className="p-3 bg-neutral-950/70 rounded-lg border border-neutral-800 space-y-2 mt-2">
+            <div className="p-3 bg-neutral-100 dark:bg-neutral-950/70 rounded-lg border border-neutral-200 dark:border-neutral-800 space-y-2 mt-2">
               <div className="flex items-center justify-between">
                 <Label required>Place of Supply (Tax Jurisdiction)</Label>
-                <span className="text-xs font-semibold text-neutral-300">
-                  State Code: <span className="text-amber-400">{buyer.placeOfSupplyCode}</span>
+                <span className="text-xs font-semibold text-neutral-800 dark:text-neutral-300">
+                  State Code: <span className="text-primary font-bold">{buyer.placeOfSupplyCode}</span>
                 </span>
               </div>
               <Select value={buyer.placeOfSupply} onChange={handlePlaceOfSupplyChange}>

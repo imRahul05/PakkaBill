@@ -51,7 +51,7 @@ export function TemplateGalleryModal({
       <DialogContent maxWidth="6xl" onClose={() => onOpenChange(false)} className="max-h-[90vh] flex flex-col">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <LayoutTemplate className="h-5 w-5 text-amber-400" />
+            <LayoutTemplate className="h-5 w-5 text-primary" />
             <DialogTitle>40 Print-Ready Invoice Templates Gallery</DialogTitle>
           </div>
           <DialogDescription>
@@ -60,7 +60,7 @@ export function TemplateGalleryModal({
         </DialogHeader>
 
         {/* Category Filter Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-neutral-800 scrollbar-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-neutral-200 dark:border-neutral-800 scrollbar-none">
           {(["gold", "silver", "grocery", "general"] as CategoryId[]).map((catId) => {
             const cat = CATEGORIES[catId];
             const isCatActive = selectedCat === catId;
@@ -72,8 +72,8 @@ export function TemplateGalleryModal({
                 className={cn(
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer",
                   isCatActive
-                    ? "bg-amber-500 text-neutral-950 font-bold shadow"
-                    : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+                    ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                    : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
                 )}
               >
                 {getCatIcon(catId)}

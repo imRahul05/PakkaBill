@@ -1,14 +1,213 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-border: var(--primary-border);
+  --color-primary-text: var(--primary-text);
+  --color-primary-ring: var(--primary-ring);
+  --color-primary-glow: var(--primary-glow);
+}
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #fafafa;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --border: #e4e4e7;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+
+  /* Default Amber */
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-foreground: #09090b;
+  --primary-muted: rgba(245, 158, 11, 0.12);
+  --primary-border: rgba(245, 158, 11, 0.35);
+  --primary-text: #b45309;
+  --primary-ring: #f59e0b;
+  --primary-glow: rgba(245, 158, 11, 0.25);
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --card: #18181b;
+  --card-foreground: #f4f4f5;
+  --border: #27272a;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-foreground: #09090b;
+  --primary-muted: rgba(245, 158, 11, 0.15);
+  --primary-border: rgba(245, 158, 11, 0.35);
+  --primary-text: #fbbf24;
+  --primary-ring: #f59e0b;
+  --primary-glow: rgba(245, 158, 11, 0.3);
+}
+
+/* Palette Variations */
+/* 1. Amber / Gold */
+[data-palette="amber"] {
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-foreground: #09090b;
+  --primary-muted: rgba(245, 158, 11, 0.12);
+  --primary-border: rgba(245, 158, 11, 0.35);
+  --primary-text: #b45309;
+  --primary-ring: #f59e0b;
+  --primary-glow: rgba(245, 158, 11, 0.25);
+}
+.dark [data-palette="amber"],
+.dark[data-palette="amber"] {
+  --primary: #f59e0b;
+  --primary-hover: #fbbf24;
+  --primary-foreground: #09090b;
+  --primary-muted: rgba(245, 158, 11, 0.18);
+  --primary-border: rgba(245, 158, 11, 0.4);
+  --primary-text: #fbbf24;
+  --primary-ring: #f59e0b;
+  --primary-glow: rgba(245, 158, 11, 0.35);
+}
+
+/* 2. Emerald / Green */
+[data-palette="emerald"] {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(16, 185, 129, 0.12);
+  --primary-border: rgba(16, 185, 129, 0.35);
+  --primary-text: #047857;
+  --primary-ring: #10b981;
+  --primary-glow: rgba(16, 185, 129, 0.25);
+}
+.dark [data-palette="emerald"],
+.dark[data-palette="emerald"] {
+  --primary: #10b981;
+  --primary-hover: #34d399;
+  --primary-foreground: #09090b;
+  --primary-muted: rgba(16, 185, 129, 0.18);
+  --primary-border: rgba(16, 185, 129, 0.4);
+  --primary-text: #34d399;
+  --primary-ring: #10b981;
+  --primary-glow: rgba(16, 185, 129, 0.35);
+}
+
+/* 3. Blue / Sapphire */
+[data-palette="blue"] {
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(59, 130, 246, 0.12);
+  --primary-border: rgba(59, 130, 246, 0.35);
+  --primary-text: #1d4ed8;
+  --primary-ring: #3b82f6;
+  --primary-glow: rgba(59, 130, 246, 0.25);
+}
+.dark [data-palette="blue"],
+.dark[data-palette="blue"] {
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(59, 130, 246, 0.18);
+  --primary-border: rgba(59, 130, 246, 0.4);
+  --primary-text: #60a5fa;
+  --primary-ring: #3b82f6;
+  --primary-glow: rgba(59, 130, 246, 0.35);
+}
+
+/* 4. Violet / Purple */
+[data-palette="violet"] {
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(139, 92, 246, 0.12);
+  --primary-border: rgba(139, 92, 246, 0.35);
+  --primary-text: #6d28d9;
+  --primary-ring: #8b5cf6;
+  --primary-glow: rgba(139, 92, 246, 0.25);
+}
+.dark [data-palette="violet"],
+.dark[data-palette="violet"] {
+  --primary: #8b5cf6;
+  --primary-hover: #a78bfa;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(139, 92, 246, 0.18);
+  --primary-border: rgba(139, 92, 246, 0.4);
+  --primary-text: #a78bfa;
+  --primary-ring: #8b5cf6;
+  --primary-glow: rgba(139, 92, 246, 0.35);
+}
+
+/* 5. Rose / Ruby */
+[data-palette="rose"] {
+  --primary: #f43f5e;
+  --primary-hover: #e11d48;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(244, 63, 94, 0.12);
+  --primary-border: rgba(244, 63, 94, 0.35);
+  --primary-text: #be123c;
+  --primary-ring: #f43f5e;
+  --primary-glow: rgba(244, 63, 94, 0.25);
+}
+.dark [data-palette="rose"],
+.dark[data-palette="rose"] {
+  --primary: #f43f5e;
+  --primary-hover: #fb7185;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(244, 63, 94, 0.18);
+  --primary-border: rgba(244, 63, 94, 0.4);
+  --primary-text: #fb7185;
+  --primary-ring: #f43f5e;
+  --primary-glow: rgba(244, 63, 94, 0.35);
+}
+
+/* 6. Monochrome / Noir */
+[data-palette="monochrome"] {
+  --primary: #18181b;
+  --primary-hover: #27272a;
+  --primary-foreground: #ffffff;
+  --primary-muted: rgba(24, 24, 27, 0.08);
+  --primary-border: rgba(24, 24, 27, 0.25);
+  --primary-text: #18181b;
+  --primary-ring: #71717a;
+  --primary-glow: rgba(24, 24, 27, 0.15);
+}
+.dark [data-palette="monochrome"],
+.dark[data-palette="monochrome"] {
+  --primary: #f4f4f5;
+  --primary-hover: #e4e4e7;
+  --primary-foreground: #09090b;
+  --primary-muted: rgba(244, 244, 245, 0.12);
+  --primary-border: rgba(244, 244, 245, 0.35);
+  --primary-text: #f4f4f5;
+  --primary-ring: #d4d4d8;
+  --primary-glow: rgba(244, 244, 245, 0.2);
+}
+
+/* Typography variations */
+[data-font="sans"] body,
+[data-font="sans"] {
+  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[data-font="serif"] body,
+[data-font="serif"] {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+[data-font="mono"] body,
+[data-font="mono"] {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   min-height: 100vh;
 }
 
@@ -19,16 +218,20 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #171717;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: #a1a1aa;
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #4b5563;
+  background: #71717a;
 }
 
 /* Print Optimization */

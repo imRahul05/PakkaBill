@@ -75,15 +75,15 @@ export function SilverItems({
         return (
           <div
             key={item.id || index}
-            className="rounded-xl border border-neutral-800 bg-neutral-900/70 shadow-sm hover:border-neutral-700 transition-all duration-200 overflow-hidden"
+            className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/70 shadow-xs hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 overflow-hidden"
           >
             {/* Header: Clickable to toggle collapse */}
             <div
               onClick={() => toggleItemExpanded(index, isExpanded)}
-              className="flex flex-wrap items-center justify-between gap-2 p-3.5 bg-neutral-950/40 hover:bg-neutral-800/40 cursor-pointer select-none transition-colors border-b border-neutral-800/60"
+              className="flex flex-wrap items-center justify-between gap-2 p-3.5 bg-neutral-50/80 dark:bg-neutral-950/40 hover:bg-neutral-100 dark:hover:bg-neutral-800/40 cursor-pointer select-none transition-colors border-b border-neutral-200 dark:border-neutral-800/60"
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-500/20 text-slate-300 text-xs font-bold shrink-0">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-500/20 text-slate-700 dark:text-slate-300 text-xs font-bold shrink-0 border border-slate-400/30">
                   #{index + 1}
                 </span>
                 <Badge variant="silver" className="shrink-0">Silver</Badge>
@@ -92,18 +92,18 @@ export function SilverItems({
 
                 {/* Collapsed summary pill */}
                 {!isExpanded && (
-                  <div className="flex items-center gap-2 truncate text-xs text-neutral-300">
-                    <span className="font-semibold text-neutral-100 truncate">{item.name || "Untitled Silver Article"}</span>
-                    <span className="text-neutral-500">•</span>
-                    <span className="font-mono text-neutral-400">{formatGrams(item.netWeight, 2)}</span>
+                  <div className="flex items-center gap-2 truncate text-xs text-neutral-700 dark:text-neutral-300">
+                    <span className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">{item.name || "Untitled Silver Article"}</span>
+                    <span className="text-neutral-400 dark:text-neutral-600">•</span>
+                    <span className="font-mono text-neutral-600 dark:text-neutral-400">{formatGrams(item.netWeight, 2)}</span>
                   </div>
                 )}
               </div>
 
               <div className="flex items-center gap-2 ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
                 <div className="text-right mr-1">
-                  <span className="text-[10px] text-neutral-400 block leading-tight">Total</span>
-                  <span className="text-sm font-bold text-slate-200 font-mono">
+                  <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block leading-tight">Total</span>
+                  <span className="text-sm font-bold text-neutral-900 dark:text-slate-200 font-mono">
                     {formatCurrency(item.lineTotal)}
                   </span>
                 </div>
@@ -114,7 +114,7 @@ export function SilverItems({
                   variant="ghost"
                   size="icon"
                   onClick={() => toggleItemExpanded(index, isExpanded)}
-                  className="h-8 w-8 text-neutral-400 hover:text-slate-200 hover:bg-neutral-800"
+                  className="h-8 w-8 text-neutral-500 hover:text-neutral-900 dark:hover:text-slate-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                   title={isExpanded ? "Collapse item" : "Expand item"}
                 >
                   {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -126,7 +126,7 @@ export function SilverItems({
                     variant="ghost"
                     size="icon"
                     onClick={() => onRemoveItem(index)}
-                    className="h-8 w-8 text-neutral-400 hover:text-rose-400 hover:bg-neutral-800"
+                    className="h-8 w-8 text-neutral-400 hover:text-rose-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                     title="Remove item"
                   >
                     <Trash2 className="h-4 w-4" />

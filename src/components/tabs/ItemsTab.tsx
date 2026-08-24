@@ -93,9 +93,9 @@ export function ItemsTab({
         </CardHeader>
         <CardContent>
           {items.length === 0 ? (
-            <div className="text-center py-12 border-2 border-dashed border-neutral-800 rounded-xl">
-              <ShoppingBag className="h-10 w-10 text-neutral-600 mx-auto mb-2" />
-              <h4 className="text-sm font-semibold text-neutral-300">No items added yet</h4>
+            <div className="text-center py-12 border-2 border-dashed border-neutral-300 dark:border-neutral-800 rounded-xl bg-neutral-50/50 dark:bg-neutral-900/30">
+              <ShoppingBag className="h-10 w-10 text-neutral-400 dark:text-neutral-600 mx-auto mb-2" />
+              <h4 className="text-sm font-semibold text-neutral-800 dark:text-neutral-300">No items added yet</h4>
               <p className="text-xs text-neutral-500 mb-4">
                 Click Add Line Item below to begin billing
               </p>
@@ -148,9 +148,9 @@ export function ItemsTab({
                   type="button"
                   variant="outline"
                   onClick={onAddItem}
-                  className="w-full sm:w-auto border-dashed hover:border-amber-500 hover:bg-neutral-800"
+                  className="w-full sm:w-auto border-dashed hover:border-primary hover:bg-neutral-100 dark:hover:bg-neutral-800"
                 >
-                  <Plus className="h-4 w-4 mr-2" /> Add Another Item
+                  <Plus className="h-4 w-4 mr-2 text-primary" /> Add Another Item
                 </Button>
               </div>
             </>

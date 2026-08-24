@@ -67,7 +67,7 @@ export function ImportExportModal({
       <DialogContent maxWidth="lg" onClose={() => onOpenChange(false)}>
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <FileJson className="h-5 w-5 text-amber-400" />
+            <FileJson className="h-5 w-5 text-primary" />
             <DialogTitle>Backup & Restore (JSON)</DialogTitle>
           </div>
           <DialogDescription>
@@ -80,25 +80,25 @@ export function ImportExportModal({
             <div
               className={`p-3 rounded-lg border flex items-center gap-2 text-xs font-bold ${
                 importStatus.success
-                  ? "bg-emerald-950/80 border-emerald-700 text-emerald-300"
-                  : "bg-rose-950/80 border-rose-700 text-rose-300"
+                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300"
+                  : "bg-rose-500/10 border-rose-500/30 text-rose-700 dark:text-rose-300"
               }`}
             >
               {importStatus.success ? (
-                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
               ) : (
-                <AlertCircle className="h-4 w-4 text-rose-400" />
+                <AlertCircle className="h-4 w-4 text-rose-500" />
               )}
               <span>{importStatus.message}</span>
             </div>
           )}
 
           {/* Export Section */}
-          <div className="p-4 rounded-xl border border-neutral-800 bg-neutral-950 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-300 flex items-center gap-1.5">
-              <Download className="h-4 w-4 text-amber-400" /> Export Data
+          <div className="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 space-y-3 shadow-xs">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-neutral-300 flex items-center gap-1.5">
+              <Download className="h-4 w-4 text-primary" /> Export Data
             </h3>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400">
               Download your data as a clean JSON file. Keep it safe on your drive or transfer between devices.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
@@ -124,11 +124,11 @@ export function ImportExportModal({
           </div>
 
           {/* Import Section */}
-          <div className="p-4 rounded-xl border border-neutral-800 bg-neutral-950 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-300 flex items-center gap-1.5">
-              <Upload className="h-4 w-4 text-blue-400" /> Restore Backup
+          <div className="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 space-y-3 shadow-xs">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-neutral-300 flex items-center gap-1.5">
+              <Upload className="h-4 w-4 text-blue-500 dark:text-blue-400" /> Restore Backup
             </h3>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400">
               Upload a previously exported `.json` backup file to restore your history and templates.
             </p>
 

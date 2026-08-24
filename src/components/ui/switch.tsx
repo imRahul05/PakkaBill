@@ -30,8 +30,8 @@ export function Switch({
         id={id}
         onClick={() => !disabled && onCheckedChange(!checked)}
         className={cn(
-          "peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          checked ? "bg-amber-500" : "bg-neutral-800"
+          "peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          checked ? "bg-primary" : "bg-neutral-300 dark:bg-neutral-800"
         )}
       >
         <span
@@ -43,8 +43,8 @@ export function Switch({
       </button>
       {(label || description) && (
         <div className="flex flex-col" onClick={() => !disabled && onCheckedChange(!checked)}>
-          {label && <span className="text-xs font-medium text-neutral-200">{label}</span>}
-          {description && <span className="text-[11px] text-neutral-400">{description}</span>}
+          {label && <span className="text-xs font-medium text-neutral-800 dark:text-neutral-200">{label}</span>}
+          {description && <span className="text-[11px] text-neutral-500 dark:text-neutral-400">{description}</span>}
         </div>
       )}
     </div>

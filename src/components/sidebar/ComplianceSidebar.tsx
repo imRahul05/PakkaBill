@@ -14,12 +14,12 @@ export function ComplianceSidebar({ report, isGstMode }: ComplianceSidebarProps)
   const isPerfect = report.passedCount === report.totalCount;
 
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/80 p-4 space-y-3 backdrop-blur-sm">
+    <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/80 p-4 space-y-3 backdrop-blur-sm shadow-xs">
       {/* Header with live badge & score */}
-      <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+      <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
         <div className="flex items-center gap-1.5">
-          <ShieldCheck className={cn("h-4 w-4", isPerfect ? "text-emerald-400" : "text-amber-400")} />
-          <h3 className="text-xs font-bold text-neutral-200 tracking-wider uppercase">
+          <ShieldCheck className={cn("h-4 w-4", isPerfect ? "text-emerald-500" : "text-primary")} />
+          <h3 className="text-xs font-bold text-neutral-900 dark:text-neutral-200 tracking-wider uppercase">
             {isGstMode ? "GST Compliance" : "Bill Essentials"}
           </h3>
         </div>
@@ -28,8 +28,8 @@ export function ComplianceSidebar({ report, isGstMode }: ComplianceSidebarProps)
             className={cn(
               "px-2 py-0.5 rounded-full text-xs font-bold font-mono",
               isPerfect
-                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30"
+                : "bg-primary-muted text-primary-text border border-primary-border"
             )}
           >
             {report.passedCount}/{report.totalCount}
@@ -38,11 +38,11 @@ export function ComplianceSidebar({ report, isGstMode }: ComplianceSidebarProps)
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-neutral-800 rounded-full h-1.5 overflow-hidden">
+      <div className="w-full bg-neutral-100 dark:bg-neutral-800 rounded-full h-1.5 overflow-hidden">
         <div
           className={cn(
             "h-full transition-all duration-300",
-            isPerfect ? "bg-emerald-500" : report.scorePercentage > 60 ? "bg-amber-500" : "bg-rose-500"
+            isPerfect ? "bg-emerald-500" : report.scorePercentage > 60 ? "bg-primary" : "bg-rose-500"
           )}
           style={{ width: `${report.scorePercentage}%` }}
         />
@@ -55,25 +55,27 @@ export function ComplianceSidebar({ report, isGstMode }: ComplianceSidebarProps)
             key={result.ruleId}
             className={cn(
               "flex items-start gap-2 p-1.5 rounded-md text-xs transition-colors",
-              result.passed ? "text-neutral-300" : "bg-amber-500/10 text-amber-300/90 border border-amber-500/20"
+              result.passed
+                ? "text-neutral-700 dark:text-neutral-300"
+                : "bg-primary-muted text-primary-text border border-primary-border"
             )}
           >
             {result.passed ? (
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
             ) : (
-              <AlertCircle className="h-3.5 w-3.5 text-amber-400 shrink-0 mt-0.5" />
+              <AlertCircle className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
             )}
             <div className="flex-1 min-w-0">
               <span className="font-medium block leading-tight">{result.title}</span>
               {result.message && !result.passed && (
-                <span className="text-[10px] text-amber-400/80 block mt-0.5">{result.message}</span>
+                <span className="text-[10px] opacity-90 block mt-0.5">{result.message}</span>
               )}
             </div>
           </div>
         ))}
       </div>
 
-      <p className="text-[10px] text-neutral-500 italic pt-1 border-t border-neutral-800">
+      <p className="text-[10px] text-neutral-500 italic pt-1 border-t border-neutral-200 dark:border-neutral-800">
         Advisory checklist per Rule 46. Missing optional fields will not prevent invoice generation.
       </p>
     </div>

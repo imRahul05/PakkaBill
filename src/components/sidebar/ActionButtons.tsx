@@ -42,8 +42,8 @@ export function ActionButtons({
   };
 
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/80 p-4 space-y-2.5 backdrop-blur-sm">
-      <h3 className="text-xs font-bold text-neutral-300 uppercase tracking-wider pb-1 border-b border-neutral-800">
+    <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/80 p-4 space-y-2.5 backdrop-blur-sm shadow-xs">
+      <h3 className="text-xs font-bold text-neutral-800 dark:text-neutral-300 uppercase tracking-wider pb-1 border-b border-neutral-200 dark:border-neutral-800">
         Invoice Actions
       </h3>
 
@@ -94,7 +94,7 @@ export function ActionButtons({
         >
           {justSaved ? (
             <>
-              <Check className="h-4 w-4 mr-1.5 text-emerald-400" /> Saved!
+              <Check className="h-4 w-4 mr-1.5 text-emerald-500 dark:text-emerald-400" /> Saved!
             </>
           ) : (
             <>
@@ -105,7 +105,7 @@ export function ActionButtons({
       </div>
 
       {/* Presets and Backup */}
-      <div className="grid grid-cols-2 gap-2 pt-1 border-t border-neutral-800">
+      <div className="grid grid-cols-2 gap-2 pt-1 border-t border-neutral-200 dark:border-neutral-800">
         <Button
           type="button"
           variant="outline"

@@ -92,7 +92,7 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-amber-400" />
+              <Building2 className="h-4 w-4 text-primary" />
               <CardTitle>Business & Seller Identity</CardTitle>
             </div>
             {isGstMode && (
@@ -255,7 +255,7 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Landmark className="h-4 w-4 text-amber-400" />
+            <Landmark className="h-4 w-4 text-primary" />
             <CardTitle>Bank & UPI Payment Details</CardTitle>
           </div>
           <CardDescription>Printed in the payment instructions box and UPI QR code</CardDescription>
@@ -342,7 +342,7 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
             <div className="space-y-1.5">
               <div className="flex items-center gap-1.5">
-                <QrCode className="h-3.5 w-3.5 text-amber-400" />
+                <QrCode className="h-3.5 w-3.5 text-primary" />
                 <Label>UPI ID / VPA (For Instant Scan QR)</Label>
               </div>
               <Input
@@ -350,7 +350,7 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
                 value={seller.upiId || ""}
                 onChange={(e) => onUpdate({ upiId: e.target.value.trim() })}
               />
-              <p className="text-[11px] text-neutral-400">
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
                 Generates a live, scannable UPI QR code on your printed bill
               </p>
             </div>
@@ -381,7 +381,7 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
             <div className="space-y-2">
               <Label>Business Logo (PNG / JPG / SVG)</Label>
               {seller.logoBase64 ? (
-                <div className="flex items-center gap-3 p-3 bg-neutral-950/60 rounded-lg border border-neutral-800">
+                <div className="flex items-center gap-3 p-3 bg-neutral-100 dark:bg-neutral-950/60 rounded-lg border border-neutral-200 dark:border-neutral-800">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={seller.logoBase64}
@@ -391,15 +391,15 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
                   <button
                     type="button"
                     onClick={() => onUpdate({ logoBase64: undefined })}
-                    className="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1 cursor-pointer"
+                    className="text-xs text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 flex items-center gap-1 cursor-pointer"
                   >
                     <Trash2 className="h-3.5 w-3.5" /> Remove
                   </button>
                 </div>
               ) : (
-                <label className="flex flex-col items-center justify-center border-2 border-dashed border-neutral-800 hover:border-amber-500/50 rounded-lg p-4 cursor-pointer transition-colors bg-neutral-900/50">
+                <label className="flex flex-col items-center justify-center border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-primary rounded-lg p-4 cursor-pointer transition-colors bg-neutral-50 dark:bg-neutral-900/50">
                   <Upload className="h-6 w-6 text-neutral-400 mb-1" />
-                  <span className="text-xs text-neutral-300 font-medium">Click to upload logo</span>
+                  <span className="text-xs text-neutral-700 dark:text-neutral-300 font-medium">Click to upload logo</span>
                   <span className="text-[10px] text-neutral-500">Max 2MB, transparent PNG recommended</span>
                   <input
                     type="file"
@@ -420,9 +420,9 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
                 onChange={(e) => onUpdate({ signatureText: e.target.value })}
               />
               <div className="pt-1">
-                <Label className="text-[11px] text-neutral-400 mb-1">Or Upload Digital Signature Image</Label>
+                <Label className="text-[11px] text-neutral-500 dark:text-neutral-400 mb-1">Or Upload Digital Signature Image</Label>
                 {seller.signatureBase64 ? (
-                  <div className="flex items-center gap-3 p-2 bg-neutral-950/60 rounded-lg border border-neutral-800">
+                  <div className="flex items-center gap-3 p-2 bg-neutral-100 dark:bg-neutral-950/60 rounded-lg border border-neutral-200 dark:border-neutral-800">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={seller.signatureBase64}
@@ -432,13 +432,13 @@ export function SellerTab({ seller, isGstMode, onUpdate }: SellerTabProps) {
                     <button
                       type="button"
                       onClick={() => onUpdate({ signatureBase64: undefined })}
-                      className="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1 cursor-pointer"
+                      className="text-xs text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="h-3 w-3" /> Remove
                     </button>
                   </div>
                 ) : (
-                  <label className="flex items-center justify-center border border-neutral-800 hover:border-neutral-700 rounded-md p-2 cursor-pointer transition-colors text-xs text-neutral-400 bg-neutral-900/40">
+                  <label className="flex items-center justify-center border border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 rounded-md p-2 cursor-pointer transition-colors text-xs text-neutral-600 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-900/40">
                     <Upload className="h-4 w-4 mr-2" /> Upload signature image
                     <input
                       type="file"

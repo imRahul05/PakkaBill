@@ -30,9 +30,9 @@ export function Sheet({
   if (!open) return null;
 
   const sideClasses = {
-    right: "right-0 top-0 bottom-0 w-full max-w-md border-l border-neutral-800",
-    left: "left-0 top-0 bottom-0 w-full max-w-md border-r border-neutral-800",
-    bottom: "bottom-0 left-0 right-0 max-h-[85vh] border-t border-neutral-800 rounded-t-2xl",
+    right: "right-0 top-0 bottom-0 w-full max-w-md border-l border-neutral-200 dark:border-neutral-800",
+    left: "left-0 top-0 bottom-0 w-full max-w-md border-r border-neutral-200 dark:border-neutral-800",
+    bottom: "bottom-0 left-0 right-0 max-h-[85vh] border-t border-neutral-200 dark:border-neutral-800 rounded-t-2xl",
   };
 
   return (
@@ -45,7 +45,7 @@ export function Sheet({
       {/* Drawer Panel */}
       <div
         className={cn(
-          "fixed z-50 bg-neutral-900 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out",
+          "fixed z-50 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out",
           sideClasses[side]
         )}
       >
@@ -64,7 +64,7 @@ export function SheetHeader({
   return (
     <div
       className={cn(
-        "flex items-center justify-between p-4 border-b border-neutral-800 bg-neutral-900/90 sticky top-0 z-10",
+        "flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800 bg-white/90 dark:bg-neutral-900/90 sticky top-0 z-10",
         className
       )}
       {...props}
@@ -74,7 +74,7 @@ export function SheetHeader({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-md p-1.5 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 cursor-pointer"
+          className="rounded-md p-1.5 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 cursor-pointer"
         >
           <X className="h-5 w-5" />
           <span className="sr-only">Close</span>
@@ -90,7 +90,7 @@ export function SheetTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
-      className={cn("text-base font-semibold text-neutral-100", className)}
+      className={cn("text-base font-semibold text-neutral-900 dark:text-neutral-100", className)}
       {...props}
     />
   );
@@ -102,7 +102,7 @@ export function SheetDescription({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-xs text-neutral-400 mt-0.5", className)}
+      className={cn("text-xs text-neutral-500 dark:text-neutral-400 mt-0.5", className)}
       {...props}
     />
   );
@@ -126,7 +126,7 @@ export function SheetFooter({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("p-4 border-t border-neutral-800 bg-neutral-900/90", className)}
+      className={cn("p-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/90", className)}
       {...props}
     />
   );

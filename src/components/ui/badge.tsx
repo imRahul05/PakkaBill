@@ -7,15 +7,15 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-transparent bg-amber-500/20 text-amber-300 border-amber-500/30",
-        secondary: "border-transparent bg-neutral-800 text-neutral-300",
-        success: "border-transparent bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-        warning: "border-transparent bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
-        destructive: "border-transparent bg-rose-500/20 text-rose-300 border-rose-500/30",
-        outline: "text-neutral-300 border-neutral-700",
-        gold: "border-amber-500/40 bg-amber-500/10 text-amber-400 font-serif",
-        silver: "border-slate-500/40 bg-slate-500/10 text-slate-300",
-        blue: "border-blue-500/40 bg-blue-500/10 text-blue-400",
+        default: "border-primary-border bg-primary-muted text-primary-text font-semibold",
+        secondary: "border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200",
+        success: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+        warning: "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300",
+        destructive: "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300",
+        outline: "border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300",
+        gold: "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-serif",
+        silver: "border-slate-400/40 bg-slate-500/10 text-slate-700 dark:text-slate-300",
+        blue: "border-blue-500/40 bg-blue-500/10 text-blue-700 dark:text-blue-400",
       },
     },
     defaultVariants: {
