@@ -18,4 +18,5 @@ export interface TemplateProps {
   invoice: InvoiceData;
   isThumbnail?: boolean;
   className?: string;
+  id?: string;
 }
