@@ -19,6 +19,8 @@ interface BillHistoryDrawerProps {
   onLoadInvoice: (invoice: InvoiceData) => void;
   onDeleteBill: (id: string) => Promise<boolean>;
   onClearHistory: () => Promise<boolean>;
+  onPrintBill?: (bill: StoredBill) => void;
+  onPreviewBill?: (bill: StoredBill) => void;
 }
 
 export function BillHistoryDrawer({
@@ -30,6 +32,8 @@ export function BillHistoryDrawer({
   onLoadInvoice,
   onDeleteBill,
   onClearHistory,
+  onPrintBill,
+  onPreviewBill,
 }: BillHistoryDrawerProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -137,6 +141,8 @@ export function BillHistoryDrawer({
                 onReopen={handleReopen}
                 onDuplicate={handleDuplicate}
                 onDelete={onDeleteBill}
+                onPrint={onPrintBill}
+                onPreview={onPreviewBill}
               />
             ))
           )}

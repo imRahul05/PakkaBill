@@ -15,11 +15,11 @@ const ALL_TEMPLATES_REGISTRY: Record<string, React.ComponentType<TemplateProps>>
   ...GENERAL_TEMPLATE_COMPONENTS,
 };
 
-export function TemplateRenderer({ invoice, isThumbnail = false, className }: TemplateProps) {
+export function TemplateRenderer({ invoice, isThumbnail = false, className, id }: TemplateProps) {
   const Component = ALL_TEMPLATES_REGISTRY[invoice.templateId] || GoldClassicJewellers;
 
   return (
-    <div id="print-invoice-root" className="w-full">
+    <div id={id} className="w-full">
       <Component invoice={invoice} isThumbnail={isThumbnail} className={className} />
     </div>
   );

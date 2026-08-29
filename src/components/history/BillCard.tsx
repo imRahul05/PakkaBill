@@ -6,7 +6,7 @@ import { formatCurrency } from "@/lib/formatters/currency";
 import { formatDateTime } from "@/lib/formatters/date";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FolderOpen, Copy, Trash2, Download } from "lucide-react";
+import { FolderOpen, Copy, Trash2, Download, Printer, Eye } from "lucide-react";
 import { exportSingleInvoiceJson } from "@/lib/storage/json-export";
 
 interface BillCardProps {
@@ -14,9 +14,11 @@ interface BillCardProps {
   onReopen: (bill: StoredBill) => void;
   onDuplicate: (bill: StoredBill) => void;
   onDelete: (id: string) => void;
+  onPrint?: (bill: StoredBill) => void;
+  onPreview?: (bill: StoredBill) => void;
 }
 
-export function BillCard({ bill, onReopen, onDuplicate, onDelete }: BillCardProps) {
+export function BillCard({ bill, onReopen, onDuplicate, onDelete, onPrint, onPreview }: BillCardProps) {
   const getCategoryBadgeVariant = () => {
     switch (bill.category) {
       case "gold":
@@ -68,15 +70,41 @@ export function BillCard({ bill, onReopen, onDuplicate, onDelete }: BillCardProp
           <FolderOpen className="h-3.5 w-3.5 mr-1 text-primary" /> Reopen
         </Button>
 
+        {onPreview && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => onPreview(bill)}
+            className="h-7 text-xs px-2"
+            title="Preview & view invoice template"
+          >
+            <Eye className="h-3.5 w-3.5 mr-1" /> Preview
+          </Button>
+        )}
+
+        {onPrint && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => onPrint(bill)}
+            className="h-7 text-xs px-2"
+            title="Print bill directly"
+          >
+            <Printer className="h-3.5 w-3.5 mr-1" /> Print
+          </Button>
+        )}
+
         <Button
           type="button"
           variant="outline"
           size="sm"
           onClick={() => onDuplicate(bill)}
-          className="h-7 text-xs px-2.5"
+          className="h-7 text-xs px-2"
           title="Duplicate as new invoice"
         >
-          <Copy className="h-3.5 w-3.5 mr-1" /> Duplicate
+          <Copy className="h-3.5 w-3.5 mr-1" /> Copy
         </Button>
 
         <Button
