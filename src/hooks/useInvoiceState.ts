@@ -13,6 +13,7 @@ import {
 } from "@/types/category.types";
 import {
   BuyerDetails,
+  CalculationSummary,
   InvoiceData,
   InvoiceMetadata,
   InvoiceOtherDetails,
@@ -36,16 +37,75 @@ import { loadDraft, saveDraft, loadSavedProfile } from "@/lib/storage/local-stor
 import { STORAGE_KEYS } from "@/constants/storage-keys";
 import { FormTabId } from "@/components/tabs/TabNavigation";
 
+function recomputeSummaryForInvoice(inv: InvoiceData): CalculationSummary {
+  return calculateInvoiceSummary({
+    items: inv.items,
+    other: inv.other,
+    billingMode: inv.billingMode,
+    sellerStateCode: inv.seller.address.stateCode,
+    placeOfSupplyCode: inv.buyer.placeOfSupplyCode,
+  });
+}
+
 function createInitialInvoiceWithSummary(category: CategoryId = "gold"): InvoiceData {
   const initial = createInitialInvoice(category);
-  initial.summary = calculateInvoiceSummary({
-    items: initial.items,
-    other: initial.other,
-    billingMode: initial.billingMode,
-    sellerStateCode: initial.seller.address.stateCode,
-    placeOfSupplyCode: initial.buyer.placeOfSupplyCode,
-  });
+  initial.summary = recomputeSummaryForInvoice(initial);
   return initial;
+}
+
+function createDefaultItemForCategory(category: CategoryId): LineItem {
+  switch (category) {
+    case "gold":
+      return calculateGoldItem({
+        name: "Gold Ornament",
+        grossWeight: 10,
+        netWeight: 10,
+        ratePer10g: 75000,
+        purity: "22K (916)",
+        makingChargeType: "percentage",
+        makingChargeValue: 10,
+      });
+    case "silver":
+      return calculateSilverItem({
+        name: "Silver Article",
+        grossWeight: 100,
+        netWeight: 100,
+        ratePer10g: 890,
+        purity: "925 (Sterling)",
+        makingChargeType: "percentage",
+        makingChargeValue: 10,
+      });
+    case "grocery":
+      return calculateGroceryItem({
+        name: "New Grocery Item",
+        quantity: 1,
+        unit: "kg",
+        ratePerUnit: 100,
+        isPackaged: true,
+        gstRate: 5,
+      });
+    case "general":
+      return calculateGeneralItem({
+        name: "New Item / Service",
+        quantity: 1,
+        unit: "pcs",
+        ratePerUnit: 1000,
+        gstRate: 18,
+      });
+  }
+}
+
+function recalculateLineItem(item: LineItem, update: Partial<LineItem>): LineItem {
+  switch (item.category) {
+    case "gold":
+      return calculateGoldItem({ ...item, ...update } as Partial<GoldItem>);
+    case "silver":
+      return calculateSilverItem({ ...item, ...update } as Partial<SilverItem>);
+    case "grocery":
+      return calculateGroceryItem({ ...item, ...update } as Partial<GroceryItem>);
+    case "general":
+      return calculateGeneralItem({ ...item, ...update } as Partial<GeneralItem>);
+  }
 }
 
 const DEFAULT_SERVER_INVOICE: InvoiceData = createInitialInvoiceWithSummary("gold");
@@ -63,13 +123,7 @@ function getInvoiceSnapshot(): InvoiceData {
       if (savedProfile) {
         const initial = createInitialInvoiceWithSummary("gold");
         initial.seller = savedProfile;
-        initial.summary = calculateInvoiceSummary({
-          items: initial.items,
-          other: initial.other,
-          billingMode: initial.billingMode,
-          sellerStateCode: savedProfile.address.stateCode,
-          placeOfSupplyCode: initial.buyer.placeOfSupplyCode,
-        });
+        initial.summary = recomputeSummaryForInvoice(initial);
         currentInvoiceSnapshot = initial;
       } else {
         currentInvoiceSnapshot = DEFAULT_SERVER_INVOICE;
@@ -110,115 +164,81 @@ function setStoreInvoice(updater: InvoiceData | ((prev: InvoiceData) => InvoiceD
   invoiceListeners.forEach((listener) => listener());
 }
 
+function updateInvoiceStore(
+  mutator: Partial<InvoiceData> | ((prev: InvoiceData) => Partial<InvoiceData>)
+): void {
+  setStoreInvoice((prev) => {
+    const patch = typeof mutator === "function" ? mutator(prev) : mutator;
+    const next: InvoiceData = {
+      ...prev,
+      ...patch,
+      updatedAt: new Date().toISOString(),
+    };
+    next.summary = recomputeSummaryForInvoice(next);
+    return next;
+  });
+}
+
 export function useInvoiceState(initialCategory: CategoryId = "gold") {
   const [activeTab, setActiveTab] = useState<FormTabId>("seller");
   const invoice = useSyncExternalStore(subscribeInvoice, getInvoiceSnapshot, getServerInvoiceSnapshot);
 
-  // Recompute summary helper
-  const recomputeSummary = useCallback(
-    (
-      items: LineItem[],
-      other: InvoiceOtherDetails,
-      billingMode: BillingMode,
-      sellerStateCode: string,
-      placeOfSupplyCode: string
-    ) => {
-      return calculateInvoiceSummary({
-        items,
-        other,
-        billingMode,
-        sellerStateCode,
-        placeOfSupplyCode,
-      });
-    },
-    []
-  );
+  // Set Category with smart item mapping and demo seller profile switch
+  const setCategory = useCallback((newCategory: CategoryId) => {
+    updateInvoiceStore((prev) => {
+      if (prev.category === newCategory) return prev;
 
-  // Set Category with smart item mapping and category-appropriate shop profile
-  const setCategory = useCallback(
-    (newCategory: CategoryId) => {
-      setStoreInvoice((prev) => {
-        if (prev.category === newCategory) return prev;
+      const defaultTpl = CATEGORIES[newCategory].defaultTemplateId;
+      const newItems = getSampleItemsByCategory(newCategory);
 
-        const defaultTpl = CATEGORIES[newCategory].defaultTemplateId;
-        const newItems = getSampleItemsByCategory(newCategory);
+      const savedProfile = loadSavedProfile();
+      const demoShopNames = [
+        "Shree Krishna Jewellers",
+        "Shree Silver Art Emporium",
+        "Shree Ganesh Supermarket & Kirana",
+        "Apex Solutions & Trading",
+      ];
+      const isUsingDemoSeller = !savedProfile || demoShopNames.includes(prev.seller.tradeName);
 
-        // If user has not saved a custom profile in localStorage, switch demo shop to category-specific shop
-        const savedProfile = loadSavedProfile();
-        const demoShopNames = [
-          "Shree Krishna Jewellers",
-          "Shree Silver Art Emporium",
-          "Shree Ganesh Supermarket & Kirana",
-          "Apex Solutions & Trading",
-        ];
-        const isUsingDemoSeller = !savedProfile || demoShopNames.includes(prev.seller.tradeName);
+      const updatedSeller = isUsingDemoSeller
+        ? getSampleSellerProfileByCategory(newCategory)
+        : prev.seller;
 
-        const updatedSeller = isUsingDemoSeller
-          ? getSampleSellerProfileByCategory(newCategory)
-          : prev.seller;
+      const updatedTerms = getSampleTermsByCategory(newCategory);
+      const updatedInvoiceMeta: InvoiceMetadata = {
+        ...prev.invoice,
+        termsAndConditions: updatedTerms,
+      };
 
-        const updatedTerms = getSampleTermsByCategory(newCategory);
-        const updatedInvoiceMeta: InvoiceMetadata = {
-          ...prev.invoice,
-          termsAndConditions: updatedTerms,
-        };
-
-        const newSummary = recomputeSummary(
-          newItems,
-          prev.other,
-          prev.billingMode,
-          updatedSeller.address.stateCode,
-          prev.buyer.placeOfSupplyCode
-        );
-
-        return {
-          ...prev,
-          category: newCategory,
-          templateId: defaultTpl,
-          seller: updatedSeller,
-          invoice: updatedInvoiceMeta,
-          items: newItems,
-          summary: newSummary,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-    },
-    [recomputeSummary]
-  );
+      return {
+        category: newCategory,
+        templateId: defaultTpl,
+        seller: updatedSeller,
+        invoice: updatedInvoiceMeta,
+        items: newItems,
+      };
+    });
+  }, []);
 
   // Set Billing Mode (GST vs Non-GST)
-  const setBillingMode = useCallback(
-    (newMode: BillingMode) => {
-      setStoreInvoice((prev) => {
-        if (prev.billingMode === newMode) return prev;
+  const setBillingMode = useCallback((newMode: BillingMode) => {
+    updateInvoiceStore((prev) => {
+      if (prev.billingMode === newMode) return prev;
 
-        const newSummary = recomputeSummary(
-          prev.items,
-          prev.other,
-          newMode,
-          prev.seller.address.stateCode,
-          prev.buyer.placeOfSupplyCode
-        );
+      const updatedInvoiceMeta: InvoiceMetadata = {
+        ...prev.invoice,
+        invoiceType:
+          newMode === "non_gst"
+            ? ("bill_of_supply" as InvoiceType)
+            : ("tax_invoice" as InvoiceType),
+      };
 
-        const updatedInvoiceMeta: InvoiceMetadata = {
-          ...prev.invoice,
-          invoiceType:
-            newMode === "non_gst"
-              ? ("bill_of_supply" as InvoiceType)
-              : ("tax_invoice" as InvoiceType),
-        };
-
-        return {
-          ...prev,
-          billingMode: newMode,
-          invoice: updatedInvoiceMeta,
-          summary: newSummary,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-    },
-    [recomputeSummary]
-  );
+      return {
+        billingMode: newMode,
+        invoice: updatedInvoiceMeta,
+      };
+    });
+  }, []);
 
   // Set Active Template
   const setTemplateId = useCallback((templateId: string) => {
@@ -230,263 +250,66 @@ export function useInvoiceState(initialCategory: CategoryId = "gold") {
   }, []);
 
   // Update Seller Details
-  const updateSeller = useCallback(
-    (sellerUpdate: Partial<SellerProfile>) => {
-      setStoreInvoice((prev) => {
-        const updatedSeller = { ...prev.seller, ...sellerUpdate };
-        const newSummary = recomputeSummary(
-          prev.items,
-          prev.other,
-          prev.billingMode,
-          updatedSeller.address.stateCode,
-          prev.buyer.placeOfSupplyCode
-        );
-        return {
-          ...prev,
-          seller: updatedSeller,
-          summary: newSummary,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-    },
-    [recomputeSummary]
-  );
+  const updateSeller = useCallback((sellerUpdate: Partial<SellerProfile>) => {
+    updateInvoiceStore((prev) => ({
+      seller: { ...prev.seller, ...sellerUpdate },
+    }));
+  }, []);
 
   // Update Buyer Details
-  const updateBuyer = useCallback(
-    (buyerUpdate: Partial<BuyerDetails>) => {
-      setStoreInvoice((prev) => {
-        const updatedBuyer = { ...prev.buyer, ...buyerUpdate };
-        const newSummary = recomputeSummary(
-          prev.items,
-          prev.other,
-          prev.billingMode,
-          prev.seller.address.stateCode,
-          updatedBuyer.placeOfSupplyCode
-        );
-        return {
-          ...prev,
-          buyer: updatedBuyer,
-          summary: newSummary,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-    },
-    [recomputeSummary]
-  );
+  const updateBuyer = useCallback((buyerUpdate: Partial<BuyerDetails>) => {
+    updateInvoiceStore((prev) => ({
+      buyer: { ...prev.buyer, ...buyerUpdate },
+    }));
+  }, []);
 
   // Update Invoice Metadata
-  const updateInvoiceMeta = useCallback(
-    (metaUpdate: Partial<InvoiceMetadata>) => {
-      setStoreInvoice((prev) => ({
-        ...prev,
-        invoice: { ...prev.invoice, ...metaUpdate },
-        updatedAt: new Date().toISOString(),
-      }));
-    },
-    []
-  );
+  const updateInvoiceMeta = useCallback((metaUpdate: Partial<InvoiceMetadata>) => {
+    setStoreInvoice((prev) => ({
+      ...prev,
+      invoice: { ...prev.invoice, ...metaUpdate },
+      updatedAt: new Date().toISOString(),
+    }));
+  }, []);
 
   // Update Other Details (Discounts, Shipping, Rounding, etc.)
-  const updateOther = useCallback(
-    (otherUpdate: Partial<InvoiceOtherDetails>) => {
-      setStoreInvoice((prev) => {
-        const updatedOther = { ...prev.other, ...otherUpdate };
-        const newSummary = recomputeSummary(
-          prev.items,
-          updatedOther,
-          prev.billingMode,
-          prev.seller.address.stateCode,
-          prev.buyer.placeOfSupplyCode
-        );
-        return {
-          ...prev,
-          other: updatedOther,
-          summary: newSummary,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-    },
-    [recomputeSummary]
-  );
+  const updateOther = useCallback((otherUpdate: Partial<InvoiceOtherDetails>) => {
+    updateInvoiceStore((prev) => ({
+      other: { ...prev.other, ...otherUpdate },
+    }));
+  }, []);
 
   // Line Items Operations
   const addItem = useCallback(() => {
-    setStoreInvoice((prev) => {
-      let newItem: LineItem;
+    updateInvoiceStore((prev) => ({
+      items: [...prev.items, createDefaultItemForCategory(prev.category)],
+    }));
+  }, []);
 
-      if (prev.category === "gold") {
-        newItem = calculateGoldItem({
-          name: "Gold Ornament",
-          grossWeight: 10,
-          netWeight: 10,
-          ratePer10g: 75000,
-          purity: "22K (916)",
-          makingChargeType: "percentage",
-          makingChargeValue: 10,
-        });
-      } else if (prev.category === "silver") {
-        newItem = calculateSilverItem({
-          name: "Silver Article",
-          grossWeight: 100,
-          netWeight: 100,
-          ratePer10g: 890,
-          purity: "925 (Sterling)",
-          makingChargeType: "percentage",
-          makingChargeValue: 10,
-        });
-      } else if (prev.category === "grocery") {
-        newItem = calculateGroceryItem({
-          name: "New Grocery Item",
-          quantity: 1,
-          unit: "kg",
-          ratePerUnit: 100,
-          isPackaged: true,
-          gstRate: 5,
-        });
-      } else {
-        newItem = calculateGeneralItem({
-          name: "New Item / Service",
-          quantity: 1,
-          unit: "pcs",
-          ratePerUnit: 1000,
-          gstRate: 18,
-        });
-      }
-
-      const newItems = [...prev.items, newItem];
-      const newSummary = recomputeSummary(
-        newItems,
-        prev.other,
-        prev.billingMode,
-        prev.seller.address.stateCode,
-        prev.buyer.placeOfSupplyCode
-      );
-
-      return {
-        ...prev,
-        items: newItems,
-        summary: newSummary,
-        updatedAt: new Date().toISOString(),
-      };
+  const updateItem = useCallback((index: number, itemUpdate: Partial<LineItem>) => {
+    updateInvoiceStore((prev) => {
+      if (index < 0 || index >= prev.items.length) return prev;
+      const newItems = [...prev.items];
+      newItems[index] = recalculateLineItem(prev.items[index], itemUpdate);
+      return { items: newItems };
     });
-  }, [recomputeSummary]);
+  }, []);
 
-  const updateItem = useCallback(
-    (index: number, itemUpdate: Partial<LineItem>) => {
-      setStoreInvoice((prev) => {
-        if (index < 0 || index >= prev.items.length) return prev;
-
-        const currentItem = prev.items[index];
-        let recalculatedItem: LineItem;
-
-        if (currentItem.category === "gold") {
-          recalculatedItem = calculateGoldItem({
-            ...currentItem,
-            ...itemUpdate,
-          } as Partial<GoldItem>);
-        } else if (currentItem.category === "silver") {
-          recalculatedItem = calculateSilverItem({
-            ...currentItem,
-            ...itemUpdate,
-          } as Partial<SilverItem>);
-        } else if (currentItem.category === "grocery") {
-          recalculatedItem = calculateGroceryItem({
-            ...currentItem,
-            ...itemUpdate,
-          } as Partial<GroceryItem>);
-        } else {
-          recalculatedItem = calculateGeneralItem({
-            ...currentItem,
-            ...itemUpdate,
-          } as Partial<GeneralItem>);
-        }
-
-        const newItems = [...prev.items];
-        newItems[index] = recalculatedItem;
-
-        const newSummary = recomputeSummary(
-          newItems,
-          prev.other,
-          prev.billingMode,
-          prev.seller.address.stateCode,
-          prev.buyer.placeOfSupplyCode
-        );
-
-        return {
-          ...prev,
-          items: newItems,
-          summary: newSummary,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-    },
-    [recomputeSummary]
-  );
-
-  const removeItem = useCallback(
-    (index: number) => {
-      setStoreInvoice((prev) => {
-        if (index < 0 || index >= prev.items.length) return prev;
-
-        const newItems = prev.items.filter((_, i) => i !== index);
-        const newSummary = recomputeSummary(
-          newItems,
-          prev.other,
-          prev.billingMode,
-          prev.seller.address.stateCode,
-          prev.buyer.placeOfSupplyCode
-        );
-
-        return {
-          ...prev,
-          items: newItems,
-          summary: newSummary,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-    },
-    [recomputeSummary]
-  );
+  const removeItem = useCallback((index: number) => {
+    updateInvoiceStore((prev) => {
+      if (index < 0 || index >= prev.items.length) return prev;
+      return { items: prev.items.filter((_, i) => i !== index) };
+    });
+  }, []);
 
   const clearItems = useCallback(() => {
-    setStoreInvoice((prev) => {
-      const newSummary = recomputeSummary(
-        [],
-        prev.other,
-        prev.billingMode,
-        prev.seller.address.stateCode,
-        prev.buyer.placeOfSupplyCode
-      );
-
-      return {
-        ...prev,
-        items: [],
-        summary: newSummary,
-        updatedAt: new Date().toISOString(),
-      };
-    });
-  }, [recomputeSummary]);
+    updateInvoiceStore({ items: [] });
+  }, []);
 
   // Load entire invoice (from history, preset, or import)
-  const loadInvoice = useCallback(
-    (newInvoice: InvoiceData) => {
-      const newSummary = recomputeSummary(
-        newInvoice.items,
-        newInvoice.other,
-        newInvoice.billingMode,
-        newInvoice.seller.address.stateCode,
-        newInvoice.buyer.placeOfSupplyCode
-      );
-
-      setStoreInvoice({
-        ...newInvoice,
-        summary: newSummary,
-        updatedAt: new Date().toISOString(),
-      });
-    },
-    [recomputeSummary]
-  );
+  const loadInvoice = useCallback((newInvoice: InvoiceData) => {
+    updateInvoiceStore(newInvoice);
+  }, []);
 
   // Reset to initial category state
   const resetToCategoryDefaults = useCallback(
@@ -494,16 +317,9 @@ export function useInvoiceState(initialCategory: CategoryId = "gold") {
       const current = getInvoiceSnapshot();
       const targetCat = category || current.category || initialCategory;
       const fresh = createInitialInvoice(targetCat);
-      fresh.summary = recomputeSummary(
-        fresh.items,
-        fresh.other,
-        fresh.billingMode,
-        fresh.seller.address.stateCode,
-        fresh.buyer.placeOfSupplyCode
-      );
-      setStoreInvoice(fresh);
+      updateInvoiceStore(fresh);
     },
-    [initialCategory, recomputeSummary]
+    [initialCategory]
   );
 
   return {

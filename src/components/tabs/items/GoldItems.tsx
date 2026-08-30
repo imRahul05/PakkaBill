@@ -1,9 +1,8 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import { GoldItem, GoldPurity } from "@/types/category.types";
 import { GOLD_PURITIES } from "@/constants/categories";
 import { formatCurrency, formatGrams } from "@/lib/formatters/currency";
+import { useCollapsibleList } from "@/hooks/useCollapsibleList";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -25,32 +24,7 @@ export function GoldItems({
   onUpdateItem,
   onRemoveItem,
 }: GoldItemsProps) {
-  // Explicit toggle overrides. Defaults: latest item expanded, earlier items collapsed
-  const [expandedIndices, setExpandedIndices] = useState<Record<number, boolean>>({});
-
-  const toggleItemExpanded = (index: number, currentExpanded: boolean) => {
-    setExpandedIndices((prev) => ({
-      ...prev,
-      [index]: !currentExpanded,
-    }));
-  };
-
-  const handleToggleAll = (expand: boolean) => {
-    const next: Record<number, boolean> = {};
-    items.forEach((_, idx) => {
-      next[idx] = expand;
-    });
-    setExpandedIndices(next);
-  };
-
-  const getItemIsExpanded = (index: number): boolean => {
-    if (expandedIndices[index] !== undefined) {
-      return expandedIndices[index];
-    }
-    return index === items.length - 1;
-  };
-
-  const allExpanded = items.every((_, idx) => getItemIsExpanded(idx));
+  const { isExpanded, toggleItem, toggleAll, allExpanded } = useCollapsibleList(items.length);
 
   return (
     <div className="space-y-4">
@@ -60,7 +34,7 @@ export function GoldItems({
           <span>{items.length} Gold Line Items</span>
           <button
             type="button"
-            onClick={() => handleToggleAll(!allExpanded)}
+            onClick={() => toggleAll(!allExpanded)}
             className="flex items-center gap-1 text-primary hover:opacity-80 font-semibold cursor-pointer transition-colors"
           >
             <ChevronsUpDown className="h-3.5 w-3.5" />
@@ -70,7 +44,7 @@ export function GoldItems({
       )}
 
       {items.map((item, index) => {
-        const isExpanded = getItemIsExpanded(index);
+        const itemExpanded = isExpanded(index);
         const isExchangeEnabled = Boolean(item.oldGoldExchange?.enabled);
 
         return (
@@ -80,7 +54,7 @@ export function GoldItems({
           >
             {/* Header: Clickable to toggle collapse */}
             <div
-              onClick={() => toggleItemExpanded(index, isExpanded)}
+              onClick={() => toggleItem(index, itemExpanded)}
               className="flex flex-wrap items-center justify-between gap-2 p-3.5 bg-neutral-50/80 dark:bg-neutral-950/40 hover:bg-neutral-100 dark:hover:bg-neutral-800/40 cursor-pointer select-none transition-colors border-b border-neutral-200 dark:border-neutral-800/60"
             >
               <div className="flex items-center gap-2.5 min-w-0">
@@ -91,7 +65,7 @@ export function GoldItems({
                 {item.purity && <Badge variant="secondary" className="shrink-0">{item.purity}</Badge>}
 
                 {/* Collapsed summary pill */}
-                {!isExpanded && (
+                {!itemExpanded && (
                   <div className="flex items-center gap-2 truncate text-xs text-neutral-700 dark:text-neutral-300">
                     <span className="font-semibold text-neutral-900 dark:text-neutral-100 truncate">{item.name || "Untitled Gold Item"}</span>
                     <span className="text-neutral-400 dark:text-neutral-600">•</span>
@@ -119,11 +93,11 @@ export function GoldItems({
                   type="button"
                   variant="ghost"
                   size="icon"
-                  onClick={() => toggleItemExpanded(index, isExpanded)}
+                  onClick={() => toggleItem(index, itemExpanded)}
                   className="h-8 w-8 text-neutral-500 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                  title={isExpanded ? "Collapse item" : "Expand item"}
+                  title={itemExpanded ? "Collapse item" : "Expand item"}
                 >
-                  {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {itemExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </Button>
 
                 {items.length > 1 && (
@@ -142,7 +116,7 @@ export function GoldItems({
             </div>
 
             {/* Collapsible Body Form Controls */}
-            {isExpanded && (
+            {itemExpanded && (
               <div className="p-4 space-y-4 animate-in fade-in slide-in-from-top-1 duration-200">
                 {/* Row 1: Item Name, Description, HSN, Purity */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">

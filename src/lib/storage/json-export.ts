@@ -3,7 +3,7 @@ import { StorageBackup } from "@/types/storage.types";
 import { loadSavedProfile, saveProfile } from "./local-storage";
 import { getAllBillsHistory, getAllPresets, saveBillToHistory, savePreset } from "./indexed-db";
 
-export function downloadJsonFile(data: unknown, filename: string): void {
+export function downloadJsonFile(data: InvoiceData | StorageBackup | Record<string, unknown>, filename: string): void {
   if (typeof window === "undefined") return;
   const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
     JSON.stringify(data, null, 2)
@@ -34,7 +34,7 @@ export async function exportFullBackup(): Promise<void> {
     presets,
   };
 
-  const filename = `zoro_gst_backup_${new Date().toISOString().split("T")[0]}.json`;
+  const filename = `pakkabill_backup_${new Date().toISOString().split("T")[0]}.json`;
   downloadJsonFile(backup, filename);
 }
 
@@ -83,9 +83,9 @@ export async function importBackupJson(jsonString: string): Promise<ImportBackup
       for (const preset of parsed.presets) {
         if (preset && preset.id && preset.templateData) {
           await savePreset({
-            name: preset.name,
-            category: preset.category,
-            description: preset.description,
+            name: preset.name || "Untitled Preset",
+            category: preset.category || "gold",
+            description: preset.description || "",
             templateData: preset.templateData,
           });
           presetsCount++;
