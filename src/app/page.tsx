@@ -31,7 +31,6 @@ import { exportToPdf, printInvoice } from "@/lib/pdf/export-pdf";
 import { exportSingleInvoiceJson } from "@/lib/storage/json-export";
 import { TemplateRenderer } from "@/components/templates/TemplateRenderer";
 import { TEMPLATES } from "@/constants/templates";
-import { StoredBill } from "@/types/storage.types";
 
 export default function HomePage() {
   const {
@@ -268,7 +267,7 @@ export default function HomePage() {
           open={isHistoryOpen}
           onOpenChange={setIsHistoryOpen}
           bills={bills}
-          lastEvictedBill={lastEvictedBill as StoredBill | null}
+          lastEvictedBill={lastEvictedBill}
           onClearEvictedNotice={clearEvictedNotice}
           onLoadInvoice={loadInvoice}
           onDeleteBill={deleteBillFromHistory}

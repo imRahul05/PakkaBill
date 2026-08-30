@@ -64,7 +64,7 @@ export function calculateInvoiceSummary({
 
         // Making charges tax bucket
         if (makingVal > 0) {
-          const makingHsn = item.category === "gold" ? "998892" : "998892";
+          const makingHsn = "998892";
           const makingKey = `${makingHsn}_${item.makingGstRate}`;
           const existingMaking = hsnMap.get(makingKey) || {
             hsn: makingHsn,
@@ -75,22 +75,8 @@ export function calculateInvoiceSummary({
           hsnMap.set(makingKey, existingMaking);
         }
       }
-    } else if (item.category === "grocery") {
-      const itemRaw = item.quantity * item.ratePerUnit;
-      rawSubtotal += itemRaw;
-      totalItemDiscounts += item.discountAmount || 0;
-
-      if (billingMode === "gst") {
-        const key = `${item.hsn}_${item.gstRate}`;
-        const existing = hsnMap.get(key) || {
-          hsn: item.hsn,
-          rate: item.gstRate,
-          taxableAmount: 0,
-        };
-        existing.taxableAmount += item.taxableValue;
-        hsnMap.set(key, existing);
-      }
-    } else if (item.category === "general") {
+    } else {
+      // Grocery & General items follow standard Quantity × Rate structure
       const itemRaw = item.quantity * item.ratePerUnit;
       rawSubtotal += itemRaw;
       totalItemDiscounts += item.discountAmount || 0;
@@ -149,7 +135,7 @@ export function calculateInvoiceSummary({
     // If there's an overall discount, proportion it across tax buckets
     const discountRatio =
       taxableBaseBeforeOverallDiscount > 0
-        ? (taxableBaseBeforeOverallDiscount - overallDiscount) /
+        ? Math.max(0, taxableBaseBeforeOverallDiscount - overallDiscount) /
           taxableBaseBeforeOverallDiscount
         : 1;
 
